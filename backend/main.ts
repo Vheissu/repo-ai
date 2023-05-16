@@ -72,15 +72,6 @@ async function search(query: string): Promise<any[]> {
       return sortedScores.slice(0, 5);
 }
 
-(async () => {
-    const results = await search("How do I add a new effect?");
-    const result = results[0];
-
-    if (result) {
-        await ask("How do I add a new effect?", result.content);
-    }
-})();
-
 async function ask(question: string, code_file: string) {
     const prompt_template = `You are Codebase AI. An AI chatbot that answers questions about code repositories on GitHub.
 
@@ -121,3 +112,12 @@ async function ask(question: string, code_file: string) {
 
     console.log(response);
 }
+
+(async () => {
+    const results = await search("How do I add a new effect?");
+    const result = results[0];
+
+    if (result) {
+        await ask("How do I add a new effect?", result.content);
+    }
+})();
