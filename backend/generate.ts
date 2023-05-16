@@ -3,60 +3,31 @@ dotenv.config();
 
 import * as fs from "fs";
 import { GithubRepoLoader } from "langchain/document_loaders/web/github";
-import { Document } from "langchain/document";
 import { CharacterTextSplitter } from "langchain/text_splitter";
-import { Octokit } from "@octokit/rest";
-import { Configuration, OpenAIApi } from "openai";
-import { encode } from "gpt-3-encoder";
-import { IEmbedding } from "./i-embedding";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORG_ID,
+const embeddings = new OpenAIEmbeddings({
+    openAIApiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai = new OpenAIApi(config);
-
-// Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
-async function downloadFile(url: string): Promise<string> {
-  const response = await fetch(url);
-  const text = await response.text();
-  return text;
-}
-
 async function getEmbedding(text: string): Promise<number[]> {
-  const response = await openai.createEmbedding({
-    input: text,
-    model: "text-embedding-ada-002",
-  });
-
-  return response.data.data[0].embedding;
+    const embedding = await embeddings.embedQuery(text);
+    return embedding;
 }
 
 async function processGithubRepo(repoUrl: string): Promise<void> {
   try {
-    const exclude_dirs = [".git", "node_modules", "public", "assets", "static"];
-    const exclude_files = ["package-lock.json", ".DS_Store", "yarn.lock"];
+    const exclude_ext = ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.tiff", "*.ico", "*.svg", "*.webp", "*.mp3", "*.wav"];
+    const exclude_dirs = [".git", ".vscode", ".github", ".circleci", ".husky", "node_modules", "public", "assets", "static"];
+    const exclude_files = ["package-lock.json", ".DS_Store", "yarn.lock", ".gitignore"];
 
     const loader = new GithubRepoLoader(repoUrl, {
-      branch: "main",
+      branch: "master",
       accessToken: process.env.GITHUB_TOKEN,
       recursive: true,
       unknown: "warn",
       ignoreFiles: [
-        "*.png",
-        "*.jpg",
-        "*.jpeg",
-        "*.gif",
-        "*.bmp",
-        "*.tiff",
-        "*.ico",
-        "*.svg",
-        "*.webp",
-        "*.mp3",
-        "*.wav",
+        ...exclude_ext,
         ...exclude_dirs,
         ...exclude_files,
       ],
@@ -69,22 +40,33 @@ async function processGithubRepo(repoUrl: string): Promise<void> {
     });
 
     const docs = await loader.load();
-    const documents: string[] = [];
+
+    const documents = {};
 
     for (const doc of docs) {
       const source = doc.metadata.source;
       const source2 = source.split("/").slice(1).join("/");
 
       if (doc?.pageContent) {
-        doc.pageContent = `FILE NAME: ${source2}\n###\n${doc.pageContent.replace("\u0000", "")}`;
+        doc.pageContent = doc.pageContent.replace("\u0000", "");
 
-        documents.push(doc.pageContent);
+        const embedding = await getEmbedding(doc.pageContent);
+        doc.metadata.embedding = embedding;
+
+        if (!documents[source2]) {
+            documents[source2] = [];
+        }
+
+        documents[source2].push(doc);
       }
     }
 
-    const output = await splitter.createDocuments(documents);
-    
-    console.log(output);
+    const output = [];
+    for (const key in documents) {
+        const docs = documents[key];
+        const output2 = await splitter.splitDocuments(docs);
+        output.push(...output2);
+    }
 
     fs.writeFileSync("embeddings.json", JSON.stringify(output, null, 2));
   } catch (error) {
@@ -92,5 +74,5 @@ async function processGithubRepo(repoUrl: string): Promise<void> {
   }
 }
 
-const repoUrl = "https://github.com/Vheissu/cortex-device-list";
+const repoUrl = "https://github.com/aurelia/aurelia";
 processGithubRepo(repoUrl);
