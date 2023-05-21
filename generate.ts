@@ -76,9 +76,6 @@ async function processGithubRepo(repoUrl: string): Promise<void> {
       if (doc?.pageContent) {
         doc.pageContent = doc.pageContent.replace("\u0000", "");
 
-        // const embedding = await getEmbedding(doc.pageContent);
-        // doc.metadata.embedding = embedding;
-
         if (!documents[source2]) {
           documents[source2] = [];
         }
