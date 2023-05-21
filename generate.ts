@@ -13,11 +13,6 @@ const embeddings = new OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY,
 });
 
-async function getEmbedding(text: string): Promise<number[]> {
-  const embedding = await embeddings.embedQuery(text);
-  return embedding;
-}
-
 async function processGithubRepo(repoUrl: string): Promise<void> {
   try {
     const model = new OpenAI({
