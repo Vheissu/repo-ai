@@ -10,10 +10,10 @@ OPENAI_API_KEY=
 GITHUB_TOKEN=
 ```
 
-## Generate embeddings
+## 1. Generate embeddings
 
-To generate the embeddings, run `npx ts-node generate.ts` which will populate the `embeddings.json` file. Make sure you change the `repoUrl` variable at the bottom with your repository.
+To generate the embeddings, run `npx ts-node generate.ts "https://github.com/Vheissu/cortex-device-list"` which will populate local vector embeddings. Make sure you change to the repository you want to create embeddings for.
 
-## Search
+## 2. Search
 
-The question is hardcoded at present until there is a UI. At the bottom of `main.ts` change the question to test.
+After you've created embeddings, you can run `npx ts-node search.ts "My question here"` to ask your question about the repository.
