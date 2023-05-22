@@ -1,0 +1,82 @@
+<div
+  id="drawer"
+  class="fixed left-0 top-0 h-full w-64 bg-gray-300 transform ${!opened ? 'translate-x-[-100%]' : ''} transition-transform duration-300 ease-in-out"
+>
+  <a
+    href="javascript:void(0)"
+    class="absolute top-0 right-0 p-6"
+    click.trigger="closeNav()"
+    >×</a
+  >
+  <div class="px-6 py-4">
+    <h2 class="text-lg font-semibold">API Keys</h2>
+    <div class="mt-8">
+      <label for="apikey1" class="block text-sm">OpenAI API Key</label>
+      <div class="relative mt-1">
+        <input
+          id="apikey1"
+          ref="apikey1"
+          type="password"
+          class="pr-10 pl-3 py-2 block w-full border-gray-300 rounded-md"
+        />
+        <div
+          class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+          click.trigger="toggleVisibility('apikey1')"
+        >
+          <svg
+            id="icon1"
+            class="h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12zm0-2a4 4 0 100-8 4 4 0 000 8zm0-2a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="mt-8">
+      <label for="apikey2" class="block text-sm">GitHub API Key</label>
+      <div class="relative mt-1">
+        <input
+          id="apikey2"
+          type="password"
+          ref="apikey2"
+          class="pr-10 pl-3 py-2 block w-full border-gray-300 rounded-md"
+        />
+        <div
+          class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+          click.trigger="toggleVisibility('apikey2')"
+        >
+          <svg
+            id="icon2"
+            class="h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12zm0-2a4 4 0 100-8 4 4 0 000 8zm0-2a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+        <button 
+          click.trigger="saveApiKeys()" 
+          class="px-4 py-2 w-full bg-pink-300 text-white rounded hover:bg-pink-600"
+        >
+          Save API Keys
+        </button>
+      </div>
+
+  </div>
+</div>

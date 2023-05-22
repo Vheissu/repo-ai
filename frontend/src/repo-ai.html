@@ -1,0 +1,26 @@
+<import from="./sidebar-drawer"></import>
+
+<div class="fixed top-0 left-0 p-6">
+    <button click.trigger="opened = !opened">
+      <svg class="h-6 w-6 fill-current text-white" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+      </svg>
+    </button>
+  </div>
+
+<sidebar-drawer opened.bind></sidebar-drawer>
+
+<div class="min-h-screen bg-gray-900 flex flex-col items-center justify-center space-y-8">
+    <div class="text-5xl text-white font-bold mb-0">ASK.AI</div>
+    <div class="flex">
+      <input type="text" class="p-4 text-xl w-96 bg-white rounded-l focus:outline-none" placeholder="Enter your question here..." value.bind="question" disabled.bind="loading" keypress.trigger="$event => keyPressed($event.which)">
+      <button class="p-4 text-xl bg-pink-300 text-white rounded-r focus:outline-none ${question.length < 5 ? 'disabled:opacity-75' : '' }" disabled.bind="loading || question.length < 5" click.trigger="ask()">
+        <span class="button-text" if.bind="!loading">ASK</span>
+        <span class="loading-indicator ${!loading ? 'hidden' : ''}">
+          <div class="spinner"></div>
+        </span>
+      </button>
+    </div>
+    <div id="response" class="text-lg text-white max-w-md" textcontent.bind="response"></div>
+  </div>
+  
