@@ -25,3 +25,7 @@ After you've created embeddings, you can run `npx ts-node search-cli.ts "My ques
 ## Frontend
 
 There is also a simple front-end application in the `frontend` which will allow you to use a simple interface to query your repo. Please ensure you run the local server first before you attempt to ask a question: `npx ts-node server.ts` which will run on port `3000`.
+
+Also, don't forget to generate your embeddings first. The server will look for a `vectors` folder which will contain the generate vectors to do cosine similarity search.
+
+To run the front-end app, go into the `frontend` directory and `npm start` (assuming you also ran `npm install` too) and the browser will open the app.
