@@ -4,28 +4,31 @@
     "description": "Ask questions about GitHub repositories",
     "main": "server.ts",
     "scripts": {
-      "test": "jest"
+        "test": "jest"
     },
     "keywords": [
-      "AI",
-      "Embeddings",
-      "Vector"
+        "AI",
+        "Embeddings",
+        "Vector"
     ],
     "author": "Dwayne Charrington <dwaynecharrington@gmail.com>",
     "license": "MIT",
     "devDependencies": {
-      "@types/node": "^20.1.5",
-      "jest": "^29.5.0",
-      "ts-node": "^10.9.1",
-      "typescript": "^5.0.4"
+        "@types/node": "^20.1.5",
+        "jest": "^29.5.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.4"
     },
     "dependencies": {
-      "@octokit/rest": "^19.0.8",
-      "dotenv": "^16.0.3",
-      "gpt-3-encoder": "^1.1.4",
-      "hnswlib-node": "^1.4.2",
-      "langchain": "^0.0.75",
-      "openai": "^3.2.1"
+        "@koa/cors": "^4.0.0",
+        "@octokit/rest": "^19.0.8",
+        "dotenv": "^16.0.3",
+        "gpt-3-encoder": "^1.1.4",
+        "hnswlib-node": "^1.4.2",
+        "koa": "^2.14.2",
+        "koa-bodyparser": "^4.4.0",
+        "koa-router": "^12.0.0",
+        "langchain": "^0.0.75",
+        "openai": "^3.2.1"
     }
-  }
-  
+}

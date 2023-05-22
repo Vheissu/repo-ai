@@ -9,14 +9,17 @@ import { OpenAI } from "langchain/llms/openai";
 
 const vectorPath = `vectors`;
 
-const embeddings = new OpenAIEmbeddings({
-  openAIApiKey: process.env.OPENAI_API_KEY,
-});
+export async function processGithubRepo(repoUrl: string, openaiApiKey: string = null, githubApiKey: string = null): Promise<void> {
+  openaiApiKey = openaiApiKey || process.env.OPENAI_API_KEY;
+  githubApiKey = githubApiKey || process.env.GITHUB_TOKEN;
 
-async function processGithubRepo(repoUrl: string): Promise<void> {
   try {
+    const embeddings = new OpenAIEmbeddings({
+      openAIApiKey: openaiApiKey,
+    });
+    
     const model = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
+      openAIApiKey: openaiApiKey,
     });
 
     const exclude_ext = [
@@ -52,7 +55,7 @@ async function processGithubRepo(repoUrl: string): Promise<void> {
 
     const loader = new GithubRepoLoader(repoUrl, {
       branch: "main",
-      accessToken: process.env.GITHUB_TOKEN,
+      accessToken: githubApiKey,
       recursive: true,
       unknown: "warn",
       ignoreFiles: [...exclude_ext, ...exclude_dirs, ...exclude_files],
@@ -92,5 +95,3 @@ async function processGithubRepo(repoUrl: string): Promise<void> {
     console.error("Error processing GitHub repository:", error);
   }
 }
-
-processGithubRepo(process.argv[2]);
